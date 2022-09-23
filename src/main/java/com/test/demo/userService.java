@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
 
 @Slf4j
@@ -22,7 +23,7 @@ public class userService {
 
         if(existUser != null) {
 
-            log.error("userId [{}} is already exist, Don't save !", userInfo.getId());
+            log.error("userId [{}] is already exist, Don't save !", userInfo.getId());
 
             return null;
         }
@@ -45,6 +46,28 @@ public class userService {
         }
 
         return result;
+
+    }
+
+    public userDto login(String userId, String password) {
+
+        userDto user = userDao.get(userId);
+
+        if(user == null) {
+
+            throw new NoSuchElementException("not found user");
+
+        }
+
+        if (user.getPassword().equals(password)) {
+
+            return user;
+
+        } else {
+
+            throw new InputMismatchException("Invalid password");
+
+        }
 
     }
 

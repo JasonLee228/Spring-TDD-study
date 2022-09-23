@@ -35,6 +35,17 @@ public class userController {
 
     }
 
+    @PostMapping("/login")
+    public userDto login(@RequestParam String userId, @RequestParam String password) {
+
+        log.info("[API CALL] : [POST] /login");
+        log.info("[REQUEST] : {}", userId + " : " + password);
+
+        userDto result = userService.login(userId, password);
+
+        return result;
+    }
+
     @GetMapping("/find")
     public userDto findUser(@RequestParam String userId) {
 
@@ -49,7 +60,7 @@ public class userController {
     @PatchMapping("/update")
     public userDto updateUser(@RequestBody userDto requestBody) {
 
-        log.info("[API CALL] : [GET] /update");
+        log.info("[API CALL] : [PATCH] /update");
         log.info("[REQUEST] : {}", requestBody);
 
         userDto result = userService.update(requestBody);
@@ -61,7 +72,7 @@ public class userController {
     @DeleteMapping("/delete")
     public userDto delete(@RequestParam String userId) {
 
-        log.info("[API CALL] : [GET] /delete");
+        log.info("[API CALL] : [DELETE] /delete");
         log.info("[REQUEST] : {}", userId);
 
         userDto result = userService.delete(userId);
