@@ -3,10 +3,7 @@ package com.test.demo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Repository
@@ -15,14 +12,15 @@ public class userDao {
 //    private static Map<String, String> userDb = new HashMap<>();
     private static List<userDto> userDb = new ArrayList<>();
 
+    public void outDatabase() { System.out.println("[Current user table]\n" + userDb); }
+
     public String save(userDto entity) {
 
         String userName = entity.getUserName();
 
         userDb.add(entity);
 
-        System.out.println("{Current Table User]");
-        System.out.println(userDb);
+        outDatabase();
         return userName;
 
     }
@@ -37,14 +35,68 @@ public class userDao {
 
             }
         }
-
         return null;
 
     }
 
-    public void outDatabase() {
+    public userDto update(userDto entity) {
 
-        System.out.println(userDb);
+        userDto findDto = null;
+        int index = -1;
+
+        for (int i=0;i<userDb.size();i++) {
+
+            if(userDb.get(i).getId().equals(entity.getId())) {
+
+                findDto = userDb.get(i);
+                index = i;
+                break;
+
+            }
+        }
+
+        if(findDto == null) {
+
+            throw new NoSuchElementException("not found user");
+
+        } else {
+
+            findDto.setUserName(entity.getUserName());
+            findDto.setPhoneNumber(entity.getPhoneNumber());
+
+            userDb.set(index, findDto);
+
+        }
+
+        return userDb.get(index);
+    }
+
+    public userDto delete(String userId) {
+
+        userDto entity = get(userId);
+
+        if(entity == null) {
+
+            throw new NoSuchElementException("not found user");
+
+        }
+
+        userDto findDto = null;
+        int index = -1;
+
+        for (int i=0;i<userDb.size();i++) {
+
+            if(userDb.get(i).getId().equals(entity.getId())) {
+
+                index = i;
+                break;
+
+            }
+        }
+
+        userDb.remove(index);
+
+        return entity;
 
     }
 

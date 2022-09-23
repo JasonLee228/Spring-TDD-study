@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.NoSuchElementException;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -28,6 +30,7 @@ public class userService {
         return userDao.save(userInfo);
 
     }
+
     public userDto findUser(String id) {
 
         userDao.outDatabase();
@@ -36,10 +39,31 @@ public class userService {
 
         log.info("Find request, find user information : {}", result);
 
+        if(result == null) {
+
+            throw new NoSuchElementException("not found user");
+        }
+
         return result;
 
     }
 
+    public userDto update(userDto updateReq) {
 
+        userDto result = userDao.update(updateReq);
+
+        return result;
+
+    }
+
+    public userDto delete(String userId) {
+
+        userDto result = userDao.delete(userId);
+
+        userDao.outDatabase();
+
+        return result;
+
+    }
 
 }

@@ -36,24 +36,39 @@ public class userController {
     }
 
     @GetMapping("/find")
-    public userDto findUser(@RequestParam String id) {
+    public userDto findUser(@RequestParam String userId) {
 
         log.info("[API CALL] : [GET] /find");
-        log.info("[REQUEST] : {}", id);
+        log.info("[REQUEST] : {}", userId);
 
-        userDto result = userService.findUser(id);
-
-        if(result == null) {
-
-            throw new NoSuchElementException();
-        }
+        userDto result = userService.findUser(userId);
 
         return result;
     }
 
+    @PatchMapping("/update")
+    public userDto updateUser(@RequestBody userDto requestBody) {
 
+        log.info("[API CALL] : [GET] /update");
+        log.info("[REQUEST] : {}", requestBody);
 
+        userDto result = userService.update(requestBody);
 
+        return result;
+
+    }
+
+    @DeleteMapping("/delete")
+    public userDto delete(@RequestParam String userId) {
+
+        log.info("[API CALL] : [GET] /delete");
+        log.info("[REQUEST] : {}", userId);
+
+        userDto result = userService.delete(userId);
+
+        return result;
+
+    }
 
 
 
