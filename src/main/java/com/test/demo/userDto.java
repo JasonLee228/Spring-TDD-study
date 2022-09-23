@@ -5,6 +5,8 @@ import org.springframework.lang.Nullable;
 
 @Getter
 @Setter
+@ToString
+@NoArgsConstructor
 //@RequiredArgsConstructor
 //@Builder
 public class userDto {
@@ -13,12 +15,19 @@ public class userDto {
     private String id;
 
     @NonNull
+    private String password;
+
+    @NonNull
     private String userName;
 
-    @Builder
-    public  userDto(String id, String userName) {
-        this.id = id;
-        this.userName = userName;
-    }
+    private String phoneNumber;
 
+    @Builder
+    public userDto(@NonNull String id, @NonNull String password,
+                   @NonNull String userName, String phoneNumber) {
+        this.id = id;
+        this.password = password;
+        this.userName = userName;
+        this.phoneNumber = phoneNumber;
+    }
 }
