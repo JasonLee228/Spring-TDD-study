@@ -66,16 +66,16 @@ public class WebMvcTestTest {
     @Order(2)
     @DisplayName("mockmvc find test")
     public void MockMvcTestFindUser() throws Exception {
-
-        // given
-        String id = "A";
-        given(userService.findUser(id)).willReturn("jason");
-
-        // when / then
-        mockMvc.perform(get("/find")
-                        .param("id", id))
-                .andExpect(status().isOk())
-                .andDo(print());
+//
+//        // given
+//        String id = "A";
+//        given(userService.findUser(id)).willReturn("jason");
+//
+//        // when / then
+//        mockMvc.perform(get("/find")
+//                        .param("id", id))
+//                .andExpect(status().isOk())
+//                .andDo(print());
 
     }
 

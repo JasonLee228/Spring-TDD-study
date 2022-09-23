@@ -2,28 +2,44 @@ package com.test.demo;
 
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class userService {
 
     private final userDao userDao;
 
-    public String findUser(String id) {
-
-        return userDao.select(id);
-
-    }
-
     public String join(userDto userInfo) {
 
-        String key = userInfo.getId();
+        log.info("Join request, user information : {}", userInfo);
 
-        String value = userInfo.getUserName();
+        userDto existUser = userDao.get(userInfo.getId());
 
-        return userDao.insert(key, value);
+        if(existUser != null) {
+
+            log.error("userId [{}} is already exist, Don't save !", userInfo.getId());
+
+            return null;
+        }
+
+        return userDao.save(userInfo);
 
     }
+    public userDto findUser(String id) {
+
+        userDao.outDatabase();
+
+        userDto result = userDao.get(id);
+
+        log.info("Find request, find user information : {}", result);
+
+        return result;
+
+    }
+
+
 
 }

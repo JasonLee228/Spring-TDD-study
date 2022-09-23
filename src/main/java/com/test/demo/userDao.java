@@ -1,31 +1,50 @@
 package com.test.demo;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Repository
 public class userDao {
 
-    private static Map<String, String> userDb = new HashMap<>();
+//    private static Map<String, String> userDb = new HashMap<>();
+    private static List<userDto> userDb = new ArrayList<>();
 
-    public String insert(String key, String value) {
+    public String save(userDto entity) {
 
-        userDb.put(key, value);
+        String userName = entity.getUserName();
 
-        System.out.println("key : " + key);
-        System.out.println("value : " + value);
+        userDb.add(entity);
 
-        return key;
+        System.out.println("{Current Table User]");
+        System.out.println(userDb);
+        return userName;
 
     }
 
-    public String select(String key) {
+    public userDto get(String key) {
+
+        for (userDto dto : userDb) {
+
+            if(dto.getId().equals(key)) {
+
+                return dto;
+
+            }
+        }
+
+        return null;
+
+    }
+
+    public void outDatabase() {
 
         System.out.println(userDb);
-
-        return userDb.get(key);
 
     }
 
