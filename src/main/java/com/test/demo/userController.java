@@ -1,12 +1,12 @@
 package com.test.demo;
 
+import com.test.demo.dto.userDto;
+import com.test.demo.dto.userSaveDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.NoSuchElementException;
 
 @Slf4j
 @RestController
@@ -16,19 +16,22 @@ public class userController {
     private final userService userService;
 
     @PostMapping("/join")
-    public String join(@RequestBody userDto requestBody) {
+    public String join(@RequestBody userSaveDto requestBody) {
 
         log.info("[API CALL] : [POST] /join");
         log.info("[REQUEST] : {}", requestBody);
 
+        // userService 의 join(회원가입) 메소드 실행
         String userId = userService.join(requestBody);
 
+        // save() 의 반환형인 String userId가 null 이 아니라면 성공적으로 회원가입 완료
         if(userId != null) {
 
             return "User " + userId + "is Successful join our app";
 
         } else {
 
+            // null 일 경우, 중복되는 아이디가 있어 회원가입이 정상적으로 이루어지지 않음
             return "join error";
 
         }
@@ -41,6 +44,7 @@ public class userController {
         log.info("[API CALL] : [POST] /login");
         log.info("[REQUEST] : {}", userId + " : " + password);
 
+        // userService 의 로그인 메소드 실행
         userDto result = userService.login(userId, password);
 
         return result;
@@ -52,6 +56,7 @@ public class userController {
         log.info("[API CALL] : [GET] /find");
         log.info("[REQUEST] : {}", userId);
 
+        // userService 의 find 메소드 실행
         userDto result = userService.findUser(userId);
 
         return result;
@@ -63,6 +68,7 @@ public class userController {
         log.info("[API CALL] : [PATCH] /update");
         log.info("[REQUEST] : {}", requestBody);
 
+        // userService 의 update 메소드 실행
         userDto result = userService.update(requestBody);
 
         return result;
@@ -75,6 +81,7 @@ public class userController {
         log.info("[API CALL] : [DELETE] /delete");
         log.info("[REQUEST] : {}", userId);
 
+        // userService 의 delete 메소드 실행
         userDto result = userService.delete(userId);
 
         return result;

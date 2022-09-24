@@ -1,5 +1,6 @@
 package com.test.demo;
 
+import com.test.demo.dto.userSaveDto;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
@@ -77,13 +78,13 @@ public class controllerTest {
         // given
         String testId = "a";
         String testName = testUserName;
-        userDto reqDto = userDto
+        userSaveDto reqDto = userSaveDto
                 .builder()
                 .id(testId)
                 .userName(null)
                 .build();
 
-        given(userService.join(any(userDto.class))).willReturn(testId);
+        given(userService.join(any(userSaveDto.class))).willReturn(testId);
 
         // when
         String result = userController.join(reqDto);
