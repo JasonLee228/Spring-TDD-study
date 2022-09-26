@@ -44,6 +44,22 @@ public class userDao {
 
     }
 
+    // 비밀번호 확인
+    public boolean validPassword(String userId, String password) {
+
+        // userId / password 받아서 해당하는 유저 아이디 / 비밀번호 검증
+        if(get(userId).getPassword().equals(password)) {
+
+            return true;
+
+        } else {
+
+            return false;
+
+        }
+
+    }
+
     /*
     * TODO
     *   Map 으로 이루어진 기존 상황에서는 Map.get(key) 를 이용하여 해당 사용자를 찾을 수 있었지만,
@@ -84,6 +100,10 @@ public class userDao {
     public userDto update(userDto entity) {
 
         int index = -1;
+
+        userDto user = get(entity.getId());
+
+        userDb.indexOf(user);
 
         for (int i=0;i<userDb.size();i++) {
 

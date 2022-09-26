@@ -59,7 +59,8 @@ public class userService {
         }
 
         // 유저 검색에 성공, 비밀번호 검증을 위해서 userDb의 정보와 입력한 password 동일한 지 검증
-        if (user.getPassword().equals(password)) {
+        // 사실 user 가 이미 있기 때문에 굳이 따로 뺄 필요 없는 로직이기는 합니다 ㅎ
+        if (userDao.validPassword(userId, password)) {
 
             // 검증에 성공, 로그인 되었다고 가정하고 로그인된 유저의 정보 반환
             return user;
