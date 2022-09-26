@@ -1,6 +1,7 @@
 package com.test.demo;
 
 import com.test.demo.dto.userDto;
+import com.test.demo.dto.userPatchDto;
 import com.test.demo.dto.userSaveDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -63,7 +64,7 @@ public class userController {
     }
 
     @PatchMapping("/update")
-    public userDto updateUser(@RequestBody userDto requestBody) {
+    public userDto updateUser(@RequestBody userPatchDto requestBody) {
 
         log.info("[API CALL] : [PATCH] /update");
         log.info("[REQUEST] : {}", requestBody);

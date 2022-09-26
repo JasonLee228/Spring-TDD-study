@@ -2,6 +2,7 @@ package com.test.demo;
 
 
 import com.test.demo.dto.userDto;
+import com.test.demo.dto.userPatchDto;
 import com.test.demo.dto.userSaveDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -95,10 +96,12 @@ public class userService {
     }
 
     // 유저 정보 업데이트
-    public userDto update(userDto updateReq) {
+    public userDto update(userPatchDto updateReq) {
+
+        userDto entity = userPatchDto.convertDto(updateReq);
 
         // userDao.update
-        userDto result = userDao.update(updateReq);
+        userDto result = userDao.update(entity);
 
         // 업데이트 이후 userDb List 상태 표시
         userDao.outDatabase();
