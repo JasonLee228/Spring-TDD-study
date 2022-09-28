@@ -1,11 +1,17 @@
 package com.test.demo;
 
-
+import com.test.demo.auth.AccessToken;
+import com.test.demo.auth.LoginResponseDto;
+import com.test.demo.auth.Session;
+import com.test.demo.auth.SessionDao;
 import com.test.demo.dto.userDto;
 import com.test.demo.dto.userPatchDto;
 import com.test.demo.dto.userSaveDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.boot.autoconfigure.session.SessionRepositoryUnavailableException;
+import org.springframework.boot.autoconfigure.session.StoreType;
 import org.springframework.stereotype.Service;
 
 import java.util.InputMismatchException;
@@ -19,6 +25,9 @@ public class userService {
     // repository 로 선언된 userDao 사용을 위함
     private final userDao userDao;
 
+    // 세션 DB와의 커넥션을 위함
+    private final SessionDao sessionDao;
+
     // 유저 회원가입 메소드
     public String join(userSaveDto req) {
 
@@ -28,7 +37,7 @@ public class userService {
         userDto existUser = userDao.get(req.getId());
 
         // 해당 아이디를 가진 유저가 이미 존재하기 때문에 회원가입을 진행할 수 없음
-        if(existUser != null) {
+        if (existUser != null) {
 
             // 이미 존재하는 회원임을 알림
             log.error("userId [{}] is already exist, Don't save !", req.getId());
@@ -45,13 +54,13 @@ public class userService {
     }
 
     // 로그인
-    public userDto login(String userId, String password) {
+    public LoginResponseDto login(String userId, String password) {
 
         // 유저 검증을 위해서 userDao.get 이용하여 유저 검색
         userDto user = userDao.get(userId);
 
         // 찾아낸 유저가 없다면
-        if(user == null) {
+        if (user == null) {
 
             // 에러 반환
             throw new NoSuchElementException("not found user");
@@ -62,8 +71,13 @@ public class userService {
         // 사실 user 가 이미 있기 때문에 굳이 따로 뺄 필요 없는 로직이기는 합니다 ㅎ
         if (userDao.validPassword(userId, password)) {
 
-            // 검증에 성공, 로그인 되었다고 가정하고 로그인된 유저의 정보 반환
-            return user;
+            Session session = new Session(user);
+            // 검증에 성공, 로그인 되었다고 가정하고 세션 생성 후 로그인된 유저의 정보 반환
+            if (sessionDao.save(session)) {
+                return new LoginResponseDto(session.getAccessToken(), session.getUserDto());
+            } else {
+                throw new SessionRepositoryUnavailableException("Session creation failed", StoreType.NONE);
+            }
 
         } else {
 
@@ -85,7 +99,7 @@ public class userService {
         log.info("Find request, find user information : {}", result);
 
         // 검색 결과가 없을 시
-        if(result == null) {
+        if (result == null) {
 
             // 에러 반환
             throw new NoSuchElementException("not found user");

@@ -1,13 +1,23 @@
 package com.test.demo;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.test.demo.aops.Auth;
+import com.test.demo.auth.LoginResponseDto;
 import com.test.demo.dto.userDto;
 import com.test.demo.dto.userPatchDto;
 import com.test.demo.dto.userSaveDto;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -26,7 +36,7 @@ public class userController {
         String userId = userService.join(requestBody);
 
         // save() 의 반환형인 String userId가 null 이 아니라면 성공적으로 회원가입 완료
-        if(userId != null) {
+        if (userId != null) {
 
             return "User " + userId + "is Successful join our app";
 
@@ -40,17 +50,15 @@ public class userController {
     }
 
     @PostMapping("/login")
-    public userDto login(@RequestParam String userId, @RequestParam String password) {
+    public ResponseEntity<LoginResponseDto> login(@RequestParam String userId, @RequestParam String password) {
 
         log.info("[API CALL] : [POST] /login");
         log.info("[REQUEST] : {}", userId + " : " + password);
 
-        // userService 의 로그인 메소드 실행
-        userDto result = userService.login(userId, password);
-
-        return result;
+        return ResponseEntity.ok(userService.login(userId, password));
     }
 
+    @Auth
     @GetMapping("/find")
     public userDto findUser(@RequestParam String userId) {
 
@@ -63,6 +71,7 @@ public class userController {
         return result;
     }
 
+    @Auth
     @PatchMapping("/update")
     public userDto updateUser(@RequestBody userPatchDto requestBody) {
 
@@ -89,18 +98,13 @@ public class userController {
 
     }
 
-
-
-
-
     // 간단히 컨트롤러의 호출 여부를 검사할 수 있는 테스트용 APi입니다.
     @GetMapping("/test")
     public ResponseEntity getTestUserName(@RequestParam String id) {
 
-        if(id.equals("A")) {
+        if (id.equals("A")) {
             return new ResponseEntity<>("testName", HttpStatus.OK);
-        }
-        else {
+        } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
