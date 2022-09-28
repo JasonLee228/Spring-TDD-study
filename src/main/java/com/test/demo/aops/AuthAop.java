@@ -23,6 +23,16 @@ public class AuthAop {
 
     private final SessionService sessionService;
 
+    /**
+     * HTTP Request 요청이 들어왔을 시 요청 헤더의 "Authorization"에 담겨있는 Token 을 읽어와 해당 Token 이
+     * 유효한 Token인지 확인 후
+     * 유효하지 못한 토큰일 경우 AccessControlException 을 발생시킵니다.
+     * 사용을 위해서는 원하는 메소드에 @Auth 어노테이션을 붙이시면 사용가능합니다.
+     * 
+     * @param joinPoint
+     * @return
+     * @throws Throwable
+     */
     @Around(value = "@annotation(Auth)")
     public Object tokenValidate(ProceedingJoinPoint joinPoint) throws Throwable {
 
