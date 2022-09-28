@@ -29,8 +29,7 @@ public class AuthAop {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
                 .getRequest();
 
-        String token = request.getHeader("Authorization");
-        Objects.requireNonNull(token, "Authorization header is null");
+        String token = Objects.requireNonNull(request.getHeader("Authorization"), "Authorization header is null");
 
         if (sessionService.tokenValidate(token)) {
             return joinPoint.proceed(joinPoint.getArgs());
