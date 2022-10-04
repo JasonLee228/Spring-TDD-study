@@ -1,7 +1,11 @@
 package com.test.demo.dto;
 
-import lombok.*;
-import org.springframework.lang.Nullable;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
